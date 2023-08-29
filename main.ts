@@ -1,31 +1,49 @@
-import { Application, Router } from "https://deno.land/x/oak@v11.1.0/mod.ts";
-import { oakCors } from "https://deno.land/x/cors@v1.2.2/mod.ts";
-import data from "./data.json" assert { type: "json" };
+import { serve } from "https://deno.land/std@0.155.0/http/server.ts";
+import {
+  createSingleIconResponse,
+  createImgIconResponse,
+  createMarkerResponse,
+} from "./icon-marker.tsx";
+import { iconMarkerSchema, iconMetadataSchema } from "./types.ts";
+import { test } from "./test.tsx";
 
-const router = new Router();
-router
-  .get("/", (context) => {
-    context.response.body = "Welcome to dinosaur API!";
-  })
-  .get("/api", (context) => {
-    context.response.body = data;
-  })
-  .get("/api/:dinosaur", (context) => {
-    if (context?.params?.dinosaur) {
-      const found = data.find((item) =>
-        item.name.toLowerCase() === context.params.dinosaur.toLowerCase()
-      );
-      if (found) {
-        context.response.body = found;
-      } else {
-        context.response.body = "No dinosaurs found.";
+
+
+serve(async (request) => {
+  const url = new URL(request.url);
+  if (url.pathname === '/test') {
+    return new Response(test(), {
+      headers: {
+        'content-type': 'text/html; charset=UTF-8',
       }
-    }
-  });
+    })
+  }
+  const searchParams = url.searchParams;
+  const obj = Object.fromEntries(searchParams.entries())
+  const params = iconMarkerSchema.parse(obj)
+  console.log(params)
+  if (params.type === 'plain') {
+    return createMarkerResponse(params)
+  } else if (params.type === 'img') {
+    return createImgIconResponse(
+      params
+    );
+  }
 
-const app = new Application();
-app.use(oakCors()); // Enable CORS for All Routes
-app.use(router.routes());
-app.use(router.allowedMethods());
+  const icon = await getIconMetadata(params.icon);
+  return createSingleIconResponse(
+    params,
+    icon,
+  );
+});
 
-await app.listen({ port: 8000 });
+async function getIconMetadata(icon: string) {
+  const [set, iconName] = icon.split(":");
+  const icons = await fetch(
+    `https://api.iconify.design/${set}.json?icons=${iconName}`
+  ).then((res) => res.json());
+  const metadata = icons.icons[iconName]
+  metadata.width ??= icons.width ?? 24
+  metadata.height ??= icons.height ?? 24
+  return iconMetadataSchema.parse(metadata)
+}
