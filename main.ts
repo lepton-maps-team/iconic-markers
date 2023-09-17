@@ -33,7 +33,7 @@ serve(async (request) => {
   const icon = await getIconMetadata(params.icon);
   if (!params.selected) {
     return createSingleIconResponse(
-      params,
+      {...params, fillColor: "#123456"},
       icon,
     );
   } else {
