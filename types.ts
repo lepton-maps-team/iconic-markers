@@ -36,7 +36,7 @@ export const iconMarkerSchema = z
       .or(
         z
           .object({
-            icon: z.string(),
+            icon: z.string().default("ci:dot-05-xl"),
             iconColor: z
               .string()
               .optional()
