@@ -18,6 +18,51 @@ export function htmlToJSX(html: string) {
   return createElementFromNode(root.childNodes[0]);
 }
 
+export function createMultipleIconResponse(
+  params: IconMarkerParams<"icon">[],
+  icon: IconMetadata
+) {
+  const element = htmlToJSX(icon.body);
+  const widthRem = 4;
+  const heightRem = widthRem * (icon.height / icon.width);
+  return new ImageResponse(
+    (
+      <Marker
+        fillColor={params[1].fillColor}
+        strokeColor={params[1].strokeColor}
+        strokeWidth={params[1].strokeWidth}
+      >
+        <div
+          tw="absolute w-[128px] h-[128px] flex justify-center items-center -top-4"
+          style={{
+            color: params[1].iconColor,
+          }}
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width={widthRem + "rem"}
+            height={heightRem + "rem"}
+            viewBox={`0 0 ${icon.width} ${icon.height}`}
+          >
+            {element}
+          </svg>
+        </div>
+      </Marker>
+    ),
+    {
+      height: 128,
+      width: 128 * params.length,
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Credentials": "true",
+        "Access-Control-Allow-Headers":
+          "Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization, accept, origin, Cache-Control, X-Requested-With",
+        "Access-Control-Allow-Methods": "POST, OPTIONS, GET, PUT, DELETE",
+      },
+    }
+  );
+}
+
 export function createSingleIconResponse(
   params: IconMarkerParams<"icon">,
   icon: IconMetadata

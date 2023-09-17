@@ -3,6 +3,7 @@ import {
   createSingleIconResponse,
   createImgIconResponse,
   createMarkerResponse,
+  createMulipleIconResponse
 } from "./icon-marker.tsx";
 import { iconMarkerSchema, iconMetadataSchema } from "./types.ts";
 import { test } from "./test.tsx";
@@ -33,12 +34,14 @@ serve(async (request) => {
   const icon = await getIconMetadata(params.icon);
   if (!params.selected) {
     return createSingleIconResponse(
-      {...params, fillColor: "#123456"},
+      params,
       icon,
     );
   } else {
-    return createSingleIconResponse(
-      params,
+    const opt1 = {...params};
+    const opt2 = {...params, fillColor: "#123456"}
+    return createMultipleIconResponse(
+      [opt1, opt2],
       icon,
     );
   }
