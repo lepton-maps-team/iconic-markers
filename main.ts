@@ -3,7 +3,7 @@ import {
   createSingleIconResponse,
   createImgIconResponse,
   createMarkerResponse,
-  createMulipleIconResponse
+  createMultipleIconResponse
 } from "./icon-marker.tsx";
 import { iconMarkerSchema, iconMetadataSchema } from "./types.ts";
 import { test } from "./test.tsx";
