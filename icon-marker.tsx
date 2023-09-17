@@ -27,27 +27,50 @@ export function createMultipleIconResponse(
   const heightRem = widthRem * (icon.height / icon.width);
   return new ImageResponse(
     (
-      <Marker
-        fillColor={params[1].fillColor}
-        strokeColor={params[1].strokeColor}
-        strokeWidth={params[1].strokeWidth}
-      >
-        <div
-          tw="absolute w-[128px] h-[128px] flex justify-center items-center -top-4"
-          style={{
-            color: params[1].iconColor,
-          }}
+      <div tw="flex flex-row">
+        <Marker
+          fillColor={params[0].fillColor}
+          strokeColor={params[0].strokeColor}
+          strokeWidth={params[0].strokeWidth}
         >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width={widthRem + "rem"}
-            height={heightRem + "rem"}
-            viewBox={`0 0 ${icon.width} ${icon.height}`}
+          <div
+            tw="absolute w-[128px] h-[128px] flex justify-center items-center -top-4"
+            style={{
+              color: params[0].iconColor,
+            }}
           >
-            {element}
-          </svg>
-        </div>
-      </Marker>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width={widthRem + "rem"}
+              height={heightRem + "rem"}
+              viewBox={`0 0 ${icon.width} ${icon.height}`}
+            >
+              {element}
+            </svg>
+          </div>
+        </Marker>
+        <Marker
+          fillColor={params[1].fillColor}
+          strokeColor={params[1].strokeColor}
+          strokeWidth={params[1].strokeWidth}
+        >
+          <div
+            tw="absolute w-[128px] h-[128px] flex justify-center items-center -top-4"
+            style={{
+              color: params[1].iconColor,
+            }}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width={widthRem + "rem"}
+              height={heightRem + "rem"}
+              viewBox={`0 0 ${icon.width} ${icon.height}`}
+            >
+              {element}
+            </svg>
+          </div>
+        </Marker>
+      </div>
     ),
     {
       height: 128,
