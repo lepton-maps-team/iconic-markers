@@ -13,6 +13,12 @@ export const iconMarkerSchema = z
       .default("auto")
       .transform((v) => (v === "auto" ? "auto" : `#${v}`)),
     strokeWidth: z.coerce.number().optional().default(0.5),
+    selectedFillColor: z
+      .string()
+      .optional()
+      .default("16A34A")
+      .transform((v) => `#${v}`),
+    selected: z.coerce.boolean().optional().default(false)
   })
   .transform((v) => {
     if (v.strokeColor === "auto") {

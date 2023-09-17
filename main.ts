@@ -31,10 +31,17 @@ serve(async (request) => {
   }
 
   const icon = await getIconMetadata(params.icon);
-  return createSingleIconResponse(
-    params,
-    icon,
-  );
+  if (!params.selected) {
+    return createSingleIconResponse(
+      params,
+      icon,
+    );
+  } else {
+    return createSingleIconResponse(
+      params,
+      icon,
+    );
+  }
 });
 
 async function getIconMetadata(icon: string) {
