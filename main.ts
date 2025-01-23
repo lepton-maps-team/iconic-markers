@@ -52,7 +52,7 @@ async function getIconMetadata(icon: string) {
   const icons = await fetch(
     `https://api.iconify.design/${set}.json?icons=${iconName}`
   ).then((res) => res.json());
-  const metadata = icons.icons[iconName]
+  const metadata: any = Object.values(icons.icons)[0]; 
   metadata.width ??= icons.width ?? 24
   metadata.height ??= icons.height ?? 24
   return iconMetadataSchema.parse(metadata)
